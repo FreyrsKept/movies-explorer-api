@@ -39,11 +39,13 @@ function updateUser(req, res, next) {
 
 function createUser(req, res, next) {
   const { email, password, name } = req.body;
+  console.log(email);
+  console.log(password);
+  console.log(name);
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      name, email, passowrd: hash,
+      email, passoword: hash, name,
     }))
-    .then((({ _id }) => User.findById(_id)))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
