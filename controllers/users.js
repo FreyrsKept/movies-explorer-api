@@ -27,36 +27,41 @@ function updateUser(req, res, next) {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new InaccurateError('Переданы некорректные данные');
+        return next(new InaccurateError('Переданы некорректные данные'));
       }
       if (err.code === 11000) {
-        throw new ConflictError('Пользователь с таким email уже существует');
+        return next(new ConflictError('Пользователь с таким email уже существует'));
       }
-      next(err);
-    })
-    .catch(next);
+      return next(err);
+    });
 }
 
 function createUser(req, res, next) {
   const { email, password, name } = req.body;
-  console.log(email);
-  console.log(password);
-  console.log(name);
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      email, passoword: hash, name,
+      email, password: hash, name,
     }))
-    .then((user) => res.send(user))
+    .then(() => res.status(201).send({ message: 'Вы успешно зарегистрировались' }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new InaccurateError('Переданы некорректные данные');
-      }
       if (err.code === 11000) {
-        throw new ConflictError('Пользователь с таким email уже существует');
+        next(new InaccurateError('Переданы некорректные данные'));
+      } else if (err.name === 'ValidationError') {
+        next(new ConflictError('Пользователь с таким email уже существует'));
+      } else {
+        next(err);
       }
-      next(err);
-    })
-    .catch(next);
+    });
+  // .catch((err) => {
+  //   if (err.name === 'ValidationError') {
+  //     throw new InaccurateError('Переданы некорректные данные');
+  //   }
+  //   if (err.code === 11000) {
+  //     throw new ConflictError('Пользователь с таким email уже существует');
+  //   }
+  //   next(err);
+  // })
+  // .catch(next);
 }
 
 function login(req, res, next) {

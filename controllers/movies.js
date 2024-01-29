@@ -22,13 +22,32 @@ function getMovies(req, res, next) {
 
 function createMovie(req, res, next) {
   const {
-    // eslint-disable-next-line max-len
-    country, director, duration, year, description, image, trailerLink, thumbnail, movieId, nameRU, nameEN,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN,
   } = req.body;
   const { _id } = req.user;
   Movie.create({
-    // eslint-disable-next-line max-len
-    country, director, duration, year, description, image, trailerLink, thumbnail, owner: _id, movieId, nameRU, nameEN,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    owner: _id,
+    movieId,
+    nameRU,
+    nameEN,
   })
     .then((movie) => {
       const { _id: movieApiId } = movie;
