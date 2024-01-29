@@ -33,10 +33,9 @@ app.use((err, req, res, next) => {
     });
   next();
 });
-
-app.use('/', routes);
 app.use(requestLogger);
 app.use(errorLogger);
+app.use('/', routes);
 app.use(errors());
 app.use(errorHandler);
 
