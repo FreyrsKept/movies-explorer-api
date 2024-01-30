@@ -43,11 +43,12 @@ function createUser(req, res, next) {
       email, password: hash, name,
     }))
     .then(() => res.status(201).send({ message: 'Вы успешно зарегистрировались' }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new InaccurateError('Переданы некорректные данные'));
-      } else if (err.name === 'ValidationError') {
         next(new ConflictError('Пользователь с таким email уже существует'));
+      } else if (err.name === 'ValidationError') {
+        next(new InaccurateError('Переданы некорректные данные'));
       } else {
         next(err);
       }
