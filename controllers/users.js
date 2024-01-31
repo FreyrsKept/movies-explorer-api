@@ -42,8 +42,8 @@ function createUser(req, res, next) {
     .then((hash) => User.create({
       email, password: hash, name,
     }))
-    .then(() => res.status(201).send({ message: 'Вы успешно зарегистрировались' }))
-    .then((user) => res.send(user))
+    // .then(() => res.status(201).send({ message: 'Вы успешно зарегистрировались' }))
+    .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже существует'));
@@ -53,16 +53,6 @@ function createUser(req, res, next) {
         next(err);
       }
     });
-  // .catch((err) => {
-  //   if (err.name === 'ValidationError') {
-  //     throw new InaccurateError('Переданы некорректные данные');
-  //   }
-  //   if (err.code === 11000) {
-  //     throw new ConflictError('Пользователь с таким email уже существует');
-  //   }
-  //   next(err);
-  // })
-  // .catch(next);
 }
 
 function login(req, res, next) {
@@ -75,9 +65,22 @@ function login(req, res, next) {
     .catch(next);
 }
 
+function signout(req, res, next) {
+  const userId = req.user._id;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return next(new NotFoundError('Пользователь с указанным _id не найден'));
+      }
+      return res.clearCookie('jwt');
+    })
+    .catch(next);
+}
+
 module.exports = {
   getUser,
   updateUser,
   createUser,
   login,
+  signout,
 };

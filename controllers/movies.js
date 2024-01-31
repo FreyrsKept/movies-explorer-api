@@ -49,10 +49,7 @@ function createMovie(req, res, next) {
     nameRU,
     nameEN,
   })
-    .then((movie) => {
-      const { _id: movieApiId } = movie;
-      res.status(201).send({ message: movieApiId });
-    })
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new NotFoundError('По вашему запросу фильмы не найдены.'));
