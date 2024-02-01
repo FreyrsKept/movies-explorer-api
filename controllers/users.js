@@ -64,23 +64,23 @@ function login(req, res, next) {
     })
     .catch(next);
 }
-
-function signout(req, res, next) {
-  const userId = req.user._id;
-  User.findById(userId)
-    .then((user) => {
-      if (!user) {
-        return next(new NotFoundError('Пользователь с указанным _id не найден'));
-      }
-      return res.clearCookie('jwt');
-    })
-    .catch(next);
-}
+// JWT local now
+// function signout(req, res, next) {
+//   const userId = req.user._id;
+//   User.findById(userId)
+//     .then((user) => {
+//       if (!user) {
+//         return next(new NotFoundError('Пользователь с указанным _id не найден'));
+//       }
+//       return res.clearCookie('jwt');
+//     })
+//     .catch(next);
+// }
 
 module.exports = {
   getUser,
   updateUser,
   createUser,
   login,
-  signout,
+  // signout,
 };

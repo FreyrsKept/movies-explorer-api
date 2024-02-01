@@ -52,7 +52,7 @@ function createMovie(req, res, next) {
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new NotFoundError('По вашему запросу фильмы не найдены.'));
+        next(new InaccurateError('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -60,7 +60,7 @@ function createMovie(req, res, next) {
 }
 
 function deleteMovie(req, res, next) {
-  const { id: movieId } = req.params;
+  const { movieId } = req.params;
   const { _id: userId } = req.user;
 
   Movie

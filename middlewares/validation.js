@@ -31,6 +31,12 @@ const validationUserGet = celebrate({
   }),
 });
 
+// const validationUserSignout = celebrate({
+//   params: Joi.object().keys({
+//     userId: Joi.string().alphanum().length(24).hex(),
+//   }),
+// });
+
 const validationUserUpdate = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
@@ -64,6 +70,7 @@ module.exports = {
   validationLogin,
   validationUserCreate,
   validationUserGet,
+  // validationUserSignout,
   validationUserUpdate,
   validationMovieCreate,
   validationMovieDelete,
